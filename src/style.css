@@ -1,0 +1,19 @@
+.clock{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+}
+.digit{
+    background-color: black;
+    color: white;
+    border-radius: 2px;
+    padding: 0 4px;
+}
+.colon{
+    padding: 0 2px;
+}
+.clockDays{}
+.clockHours{}
+.clockMinutes{}
+.clockSeconds{}
