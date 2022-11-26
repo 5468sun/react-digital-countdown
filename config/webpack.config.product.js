@@ -17,23 +17,23 @@ const prodConfig = {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          // MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
-            options: {
-              modules: {
-                localIdentName: "[hash:base64:5]",
-              },
-            }
+            // options: {
+            //   modules: {
+            //     localIdentName: "[hash:base64:5]",
+            //   },
+            // }
           }
         ]
       },
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: "main.min.css", // 提取后的css的文件名
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: "main.min.css", // 提取后的css的文件名
+    // }),
   ],
   externals: {
     // 定义外部依赖，避免把react和react-dom打包进去

@@ -12,8 +12,15 @@
   "keywords": [
     "countdown"
   ],
-  "author": "5468sun",
+  "author": {
+    "name": "5468sun",
+    "email": "5468sun@gmail.com"
+  },
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5468sun/react-digital-countdown"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@babel/preset-env": "^7.20.2",
@@ -30,5 +37,8 @@
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "prop-types": "^15.8.1",
+    "styled-components": "^5.3.6"
+  }
 }

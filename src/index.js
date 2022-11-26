@@ -1,9 +1,41 @@
 import React, { useRef, useEffect, useState } from "react";
-import styles from "./style.css";
+import styled from 'styled-components'
+import PropTypes from "prop-types";
+
+const Clock = styled.div`
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+justify-content: center;
+`
+
+const Digit = styled.div`
+background-color: black;
+color: white;
+border-radius: 2px;
+padding: 0 4px;
+`
+
+const ClockDays = styled(Digit)`
+`
+
+const ClockHours = styled(Digit)`
+`
+
+const ClockMinutes = styled(Digit)`
+`
+
+const ClockSeconds = styled(Digit)`
+`
+
+const Colon = styled.div`
+padding: 0 2px;
+`
 
 const DigitalCoundown = ({
   serverNowTime,
   dueTime,
+  interval = 1000,
   startCallback,
   progressCallBack,
   finishCallBack,
@@ -24,7 +56,9 @@ const DigitalCoundown = ({
 
   useEffect(() => {
     let timerId = getTimeUntil();
-    console.log("timerId", timerId);
+    if(typeof startCallback === "function"){
+      startCallback();
+    }
     return () => {
       if (timerId) {
         clearTimeout(timerId);
@@ -33,11 +67,8 @@ const DigitalCoundown = ({
   }, []);
 
   const getTimeUntil = () => {
-    console.log('clientTimeLag.current2',clientTimeLag.current);
     const timeLeft =
-      Date.parse(dueTime) - Date.parse(new Date()) - clientTimeLag.current;
-    console.log("timeLeft", Date.parse(dueTime) - Date.parse(new Date()));
-    console.log("timeLeft2", Date.parse(dueTime) - Date.parse(new Date())- clientTimeLag.current);
+      Date.parse(dueTime||new Date()) - Date.parse(new Date()) - clientTimeLag.current;
     let timerId;
     if (timeLeft > 0) {
       const seconds = Math.floor((timeLeft / 1000) % 60);
@@ -45,9 +76,15 @@ const DigitalCoundown = ({
       const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
       const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
       updateState({ days, hours, minutes, seconds });
-      timerId = setTimeout(getTimeUntil, 1000);
+      timerId = setTimeout(getTimeUntil, interval);
+      if(typeof progressCallBack === "function"){
+        progressCallBack(timeLeft);
+      }
     } else {
       updateState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      if(typeof finishCallBack === 'function'){
+        finishCallBack();
+      }
     }
     return timerId;
   };
@@ -63,28 +100,37 @@ const DigitalCoundown = ({
   };
 
   return (
-    <div className={styles.clock}>
+    <Clock>
       {days > 0 && (
-        <div className={`${styles.digit} ${styles.clockDays}`}>
+        <ClockDays>
           {leading0(days)}
-        </div>
+        </ClockDays>
       )}
-      {days > 0 && <div className={styles.colon}>天 </div>}
-      <div className={`${styles.digit} ${styles.clockHours}`}>
+      {days > 0 && <Colon>天 </Colon>}
+      <ClockHours>
         {leading0(hours)}
-      </div>
-      <div className={styles.colon}>: </div>
-      <div className={`${styles.digit} ${styles.clockMinutes}`}>
+      </ClockHours>
+      <Colon>: </Colon>
+      <ClockMinutes>
         {leading0(minutes)}
-      </div>
-      <div className={styles.colon}>: </div>
+      </ClockMinutes>
+      <Colon>: </Colon>
       {days === 0 && (
-        <div className={`${styles.digit} ${styles.clockSeconds}`}>
+        <ClockSeconds>
           {leading0(seconds)}
-        </div>
+        </ClockSeconds>
       )}
-    </div>
+    </Clock>
   );
 };
+
+DigitalCoundown.propTypes = {
+  serverNowTime: PropTypes.string,
+  dueTime: PropTypes.string,
+  interval: PropTypes.number,
+  startCallback: PropTypes.func,
+  progressCallBack: PropTypes.func,
+  finishCallBack: PropTypes.func,
+}
 
 export default DigitalCoundown;
